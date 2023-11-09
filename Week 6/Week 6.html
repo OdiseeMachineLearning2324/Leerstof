@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+</head>
+<body>
+    <h1>Image Classification</h1>
+
+    <!-- Replace this with your image. Make sure CORS settings allow reading the image! -->
+    <img id="img" src="img.jpg"></img>
+
+    <!-- Display the classification results -->
+    <div id="results" style="margin-top: 20px;"></div>
+
+    <!-- Load TensorFlow.js. This is required to use MobileNet. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
+
+    <script>
+        // Notice there is no 'import' statement. 'mobilenet' and 'tf' is
+        // available on the index-page because of the script tag above.
+
+        const img = document.getElementById('img');
+
+        
+        tf.loadLayersModel('https://raw.githubusercontent.com/OdiseeMachineLearning2324/Leerstof/main/model.json').then(async model =>  {
+            model.summary();
+            
+            let imageTensor = await tf.browser.fromPixels(img);
+            console.log(imageTensor);
+            imageTensor =imageTensor.mean(2) // axis 2 = the channels so that it goes from 3 to 1 channels
+            console.log(imageTensor);
+            imageTensor = imageTensor.expandDims(0);
+            const predictions = model.predict(imageTensor)
+            predictions.print()
+            console.log('Expected number')
+            predictions.argMax(1).print()
+        });
+    </script>
+</body>
+</html>
