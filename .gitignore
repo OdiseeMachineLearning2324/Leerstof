@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 *.xml
+*.h5
 
 # C extensions
 *.so
